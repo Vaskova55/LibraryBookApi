@@ -27,5 +27,13 @@ namespace LibraryBookApi.Controllers
                 i.middleName.ToLower().Contains(search.ToLower()) ||
                 i.inquiry.ToLower().Contains(search.ToLower()));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(InquiryClass inquiry)
+        {
+            _DbContext.Inquiries.Add(inquiry);
+            await _DbContext.SaveChangesAsync();
+            return Accepted();
+        }
     }
 }
