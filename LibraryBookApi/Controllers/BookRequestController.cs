@@ -35,5 +35,46 @@ namespace LibraryBookApi.Controllers
             await _DbContext.SaveChangesAsync();
             return Accepted();
         }
+
+        [HttpGet("{id}")]
+        public async Task<InquiryClass> Get(int id)
+        {
+            return await _DbContext.Inquiries.FindAsync(id);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            InquiryClass Select = await _DbContext.Inquiries.FindAsync(Id);
+            if (Select == null)
+                return NotFound();
+
+            _DbContext.Inquiries.Remove(Select);
+            await _DbContext.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, InquiryClass inquiry)
+        {
+            if (id != inquiry.id)
+                return BadRequest();
+
+            InquiryClass Select = await _DbContext.Inquiries.FindAsync(inquiry.id);
+            if (Select == null)
+                return NotFound();
+
+            Select.date = inquiry.date;
+            Select.classTrainess = inquiry.classTrainess;
+            Select.firstName = inquiry.firstName;
+            Select.lastName = inquiry.lastName;
+            Select.middleName = inquiry.middleName;
+            Select.inquiry = inquiry.inquiry;
+            Select.status = inquiry.status;
+
+            await _DbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
